@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd" >
+<mapper namespace="org.mybatis.news.ssm.dao.IEmpsDAO">
+	<!--数据增加 keyProperty表示获取自动增长 -->
+	<insert id="doCreate" parameterType="Emps" keyProperty="eid"
+		useGeneratedKeys="true">
+		insert into emps (ename,salary,comm,hiredate) values
+		(#{ename},#{salary},#{comm},#{hiredate})
+	</insert>
+	<update id="doEdit" parameterType="Emps">
+		update emps
+		<set>
+			<if test="ename!=null">
+				ename=#{ename}
+			</if>
+			<if test="salary!=null">
+				salary=#{salary}
+			</if>
+			<if test="comm!=null">
+				comm=#{comm}
+			</if>
+			<if test="hiredate!=null">
+				hiredate=#{hiredate}
+			</if>
+		</set>
+		<where>
+			eid={#eid}
+		</where>
+	</update>
+
+
+
+	<!-- 返回list集合 -->
+	<select id="findAll" resultType="Emps" parameterType="map">
+		select eid,ename,salary,comm,hiredate from emps
+		<where>
+
+
+			<choose>
+				<when test="ename!=null and ename=&quot;&quot; and eid !=null">
+					eid=#{eid} and ename=#{ename}
+				</when>
+				<when test="eid!=null">
+					eid=#{eid}
+				</when>
+				<otherwise>
+				ename=#{ename}
+				</otherwise>
+			</choose>
+		</where>
+	</select>
+
+</mapper>
